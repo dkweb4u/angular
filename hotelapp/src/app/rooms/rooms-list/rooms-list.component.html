@@ -1,0 +1,44 @@
+
+<div class="container">
+
+  <h2 class="text-center">{{title}}</h2>
+
+
+
+<table class="table table-borderd">
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>category</th>
+      <th>description</th>
+   
+      <th>Price</th>
+      <th>Images</th>
+      <th>title </th>
+      <th>Rating</th>
+     <th>Action</th> 
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr
+      [ngClass]="{ even: e, odd: o }"
+      *ngFor="let room of roomslist ; let i = index; let e = even; let o = odd"
+    >
+      <td>{{ i + 1 }}</td>
+      <td>{{ room.category }}</td>
+      <td>{{ room.description | uppercase }}</td>
+      <td>{{ room.price | currency : "INR" }}</td>
+      <td>
+        <img  src="{{ room.image }}" alt="" />
+      </td>
+      <td>{{ room.title  }}</td>
+      <!-- <td>{{ room.CheckOutTime | date }}</td> -->
+      <td>{{ room.rating.rate}}/{{ room.rating.count}}</td>
+     <td>
+      <button class="btn btn-primary" (click)="passdata(room)">Selected</button>
+     </td>
+    </tr>
+  </tbody>
+</table>
+</div>

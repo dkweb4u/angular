@@ -1,0 +1,61 @@
+<hr>
+<hotel-header></hotel-header>
+<hr>
+
+
+<!-- ============================================================================= -->
+
+<button (click)="toogle()" [innerText]="btn_text"></button>
+<div [hidden]="hidden"><h4>Menu items</h4></div>
+
+<hr />
+
+<!-- =========================== if  and ngstyle ================================================== -->
+
+<button class="btn btn-primary" (click)="adddata()">Add data</button>
+
+<hr>
+<div
+  *ngIf="rooms.total_rooms > 0"
+  [ngStyle]="{
+    color: hidden ? 'green' : 'red',
+    border: hidden ? '1px solid green' : '1px solid red'
+  }"
+>
+  <h1>The Ng if Rooms Avialable ({{ rooms.avl_rooms }})</h1>
+</div>
+
+<hr />
+
+<!-- =============================== for and Pipe  =============================================== -->
+
+<!-- pipe use | pipetype : 'style' -->
+
+<div class="container">
+
+
+  <!-- print data of output -->
+
+<div *ngIf="data">
+  {{data | json}}
+</div>
+
+  <hr>
+
+<div *ngIf="hidden">
+<!-- table (Input) -->
+
+<hotel-rooms-list [roomslist]="roomdata"  [title] = "title"  (bookfun)="gettingdata($event)"></hotel-rooms-list>
+
+</div>
+
+</div>
+
+<hr />
+
+<div class="container">
+  <h2>hello</h2>
+</div>
+
+<!-- =============================================== switch ============================================================= -->
+<!--  method in app compunet  -->

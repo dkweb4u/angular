@@ -1,0 +1,23 @@
+<div class="container">
+    <form  #loginform="ngForm" class="mt-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <input type="email" #eerror = "ngModel" hotelEmail  hotelHover [bg]="'pink'"  class="form-control" name="name"  placeholder="User name" [(ngModel)]="username">
+           
+                <div>{{eerror.errors | json}}</div>
+            </div>
+            <div class="col-lg-6">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password" [(ngModel)]="password">
+            </div>
+            <div class="col-lg-12">
+              <button type="submit" class="btn btn-primary mt-3 mb-3" (click)="securelog(loginform)">Login</button>
+    
+              <div *ngIf="result.length > 10" class="alert alert-success">{{result}}</div>
+    
+            </div>
+
+        </div>
+    </form>
+</div>
+
+

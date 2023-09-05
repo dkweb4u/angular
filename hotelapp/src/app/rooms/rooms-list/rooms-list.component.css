@@ -1,0 +1,26 @@
+table{
+    border-spacing: 2px;
+    border: 1px solid #333;
+}
+table td,
+table th{
+    border: 1px solid #333;
+padding: 10px;
+}
+.table tr.even{
+    background: red;
+    border: 1px solid red;
+}
+
+table td img{
+    max-width: 100px;
+    display: block;
+    margin: 5px auto;
+}
+.table{
+    background: #ff0000;
+}
+
+tr.even td{
+    background-color: #fafafa;
+}

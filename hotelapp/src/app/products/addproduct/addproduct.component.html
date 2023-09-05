@@ -1,0 +1,155 @@
+<div class="container mt-5 mb-5">
+  <h5 *ngIf="!ngform.invalid ">{{ successmessage }}</h5>
+
+  <h1>{{myrout}}</h1>
+
+
+  <form #ngform="ngForm" (ngSubmit)="addproduct(ngform)">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label for=""
+            >Title
+            <input
+              type="text"
+
+              #producttitle = "ngModel"
+
+              minlength="5"
+
+              [ngModelOptions]="{updateOn: 'blur'}"
+           
+              name="title"
+              class="form-control"  
+              value="{{myrout}}"
+              [(ngModel)]="product.title"
+              required
+          /></label>
+
+      <div *ngIf="producttitle.errors?.['minlength']" class="alert alert-danger">min-lenth 5  </div>
+
+      <!-- <div>{{producttitle.errors?.['minlength'] }}</div> -->
+
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label for=""
+            >Description
+            <input
+              type="email"
+              [email]="true"
+            
+              #productemail = "ngModel"
+              name="description"
+              class="form-control"
+              [(ngModel)]="product.description"
+              required
+          /></label>
+
+          <div *ngIf="productemail.pristine">{{productemail.errors  | json}}</div>
+
+
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label for=""
+            >image
+            <input
+              type="file"
+              name="image"
+              class="form-control"
+              [(ngModel)]="product.image"
+              required
+          /></label>
+        </div>
+      </div>
+
+      <!-- https://isaral.in/wp-json/wc/v3/orders?consumer_key=ck_1a4bea4cae07c9596cd8b57e0381ff8f066b13f4&consumer_secret=cs_bdf5a42fabfa355539b4fa1e542d1b2416e2e169 -->
+
+
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label for=""
+            >rating
+            <input
+              type="text"
+              name="rating"
+              class="form-control" 
+              [(ngModel)]="product.rating.rate"
+              required
+          /></label>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label for=""
+            >price
+            <input
+              type="number"
+              name="price"
+              class="form-control" min="1"
+              [(ngModel)]="product.price"
+              required
+          /></label>
+        </div>
+      </div>
+      <!-- 
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="">Date
+                <input type="date" name="date"  class="form-control"></label>
+            </div>
+        </div> -->
+
+      <div class="col-lg-12">
+        <div class="form-group">
+          <button type="submit" [disabled]="ngform.invalid" class="btn btn-primary">Submit</button>
+
+          <button [ngStyle]="{'marginLeft': '10px'}" [disabled]="ngform.pristine"  ngform.reset class="btn btn-primary" (click)="restform(ngform)">Reset</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+
+  <h5>{{sdata | currency : 'INR'}}</h5>
+
+  <hr />
+
+  <h5>{{date | date : 'dd-mm-yyyy'}}</h5>
+
+  <hr>
+
+  <h5>{{ ngform.pristine }} = pristine  </h5>
+
+  <hr />
+
+  <h5>{{ ngform.dirty }} = dirty</h5>
+
+  <hr />
+
+  <h5>{{ ngform.valid }} = valid</h5>
+
+  <hr />
+
+  <h5>{{ ngform.invalid }} =  invalid</h5>
+
+  <hr />
+
+  <h5>{{ ngform.value  | json}} = value</h5>
+
+  <hr />
+ 
+
+  <p>{{ product | json }}</p>
+  <hr />
+</div>
+
+

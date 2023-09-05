@@ -1,0 +1,62 @@
+<div class="container">
+    <p>
+        {{bookingForm.value | json}}
+        {{bookingForm.invalid}}
+
+    </p>
+    
+    <hr>
+    <button class="btn btn-success" (click)="addPassport()">Add Passport</button>
+
+    <button class="btn btn-danger" (click)="removePassport()">Remove Passport</button>
+    <hr>
+    
+    <form [formGroup]="bookingForm" class="form-group " (ngSubmit)="addBooking()">
+    
+        <input class="form-control mb-3 w-50" type="text" formControlName="passport" *ngIf="bookingForm.get('passport')"  name="" id="" placeholder="Passport">
+        <input class="form-control mb-3 w-50" type="text" formControlName="rooId"  name="" id="" placeholder="room id">
+        <input class="form-control mb-3 w-50" type="email" formControlName="gusteEmail"  name="" id="" placeholder="Email" required="">
+        <input class="form-control mb-3 w-50" type="date" formControlName="CheckInDate"  name="" id="" placeholder="Check In">
+        <input class="form-control mb-3 w-50" type="date" formControlName="CheckOutDate"  name="" id="" placeholder="Check Out">
+        <input class="form-control mb-3 w-50" type="text" formControlName="bookingstatus"  name="" id="" placeholder="Status">
+        <input class="form-control mb-3 w-50" type="number" formControlName="amount"  name="" id="" placeholder="amount">
+        <input class="form-control mb-3 w-50" type="date" formControlName="bookingDate"  name="" id="" placeholder="Booking date">
+        <input class="form-control mb-3 w-50" type="number" formControlName="mobileNumber"  name="" id="" placeholder="Phone Number">
+        <input class="form-control mb-3 w-50" type="text" formControlName="guessName"  name="" id="" placeholder="Name">
+
+
+  <div class="w-100" formGroupName="address">
+    <h2>nested form</h2>
+    <input class="form-control mb-3 w-50" type="text" formControlName="address1"  name="" id="" placeholder="address">
+    <input class="form-control mb-3 w-50" type="text" formControlName="city"  name="" id="" placeholder="city">
+    <input class="form-control mb-3 w-50" type="text" formControlName="pincode"  name="" id="" placeholder="pincode">
+  </div>
+
+  <div class="w-100" formArrayName="guests" >
+  <div  *ngFor="let guests of guests.controls; let i=index;">
+
+    <div  [formGroupName]="i">     <!-- // array  brocket -->
+        <h2>Array form {{i+1}}</h2>
+        <input class="form-control mb-3 w-50" type="text" formControlName="guestName"  name="" id="" placeholder="Gueste Name">
+        <input class="form-control mb-3 w-50" type="text" formControlName="age"  name="" id="" placeholder="G-Age">
+        <button class="btn btn-danger" type="button" (click)="deleteguste(i)">Delete</button>
+    </div>
+
+  </div>
+
+  </div>
+        
+<div class="w-100">
+    <button class="btn btn-success" type="button" (click)="addgust()">Add Gueste </button>
+<br>
+    <button class="btn btn-primary " [disabled]="bookingForm.invalid" type="submit">Book Now</button>
+
+    <br>
+
+    <button class="btn btn-success" type="button" (click)="formreset()">Reset </button>
+
+
+</div>
+    
+    </form>
+</div>
