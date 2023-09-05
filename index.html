@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Notes</title>
+</head>
+
+<style>
+    pre, h2{
+        padding: 20px;
+    }
+</style>
+
+<body>
+ 
+
+    <h2>Notes For Angular 16</h2>
+<pre> 
+'<.'= '<''
+=====================================================================================================================
+
+
+Useful Links (Mostly  anything install stop server first)
+------------
+
+Angular Tutorial: https://angular.io/ (Tutorial)
+
+Angular Bootstrap: https://valor-software.com/ (ngx-Bootstrap)
+
+Angular Meterial: https://material.angular.io/ (google Meterials)
+
+=====================================================================================================================
+
+Install Bootstrap:
+------------------
+step 1: stop server
+step 2: ng add ngx-Bootstrap
+step 3: click "yes" , Now successfully installed
+
+---------------------------------------------------------------------------------------------------------
+
+Install Angular Meterial:
+-------------------------
+step 1: stop server
+step 2: ng add @angular/material
+step 3: click "yes" , Now successfully installed
+
+--------------------------------------------------------------------------------------------------------------
+
+Crete Module:
+------------
+
+step 1: ng g m products                              // create module with seperate folder, here product is a name of module
+
+step 1a: ng g m products --routing                   //--routing  adding routing
+
+step 1b: ng g m products --routing --flat=true       //  --flat=true With no seperate folder
+
+*After Pass main commponents app module to product module  
+
+----------------------------------------------------------------------------------------------------------
+
+Protect Url  (Guard)  **Important
+------------
+
+> ng g g guard_name               // g for guard Protect url
+
+ // canActivate:[guardname]      // app-module routerpath
+
+ {path: 'home/add', component: AddproductComponent ,  canActivate:[loginGuard] },     // router module
+                                                    ---------------------------
+ 
+// In Login Guard change retun value True -> False
+
+  return false;
+
+// make dynamic or pass value
+
+ return inject(LoginserviceService).isLoggedIn ? true : inject(Router).createUrlTree(['/login'])  ;
+
+ > // inject(servicename).var_name ? true : inject(Router).createUrlTree(['/redirect_url']);
+
+// Create Function To login Success redirect method
+
+  securelog(logindata : NgForm){  
+    
+    if(this.logged.Login(logindata.value.name, logindata.value.password)){
+      this.route.navigate(['/home'])
+    }
+    else{
+      this.result = "You Did Wrong credials";
+    }
+  }
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+CanDeactive   in Grard   ==> check how to Do
+-----------
+
+-----------------------------------------------------------------------------------------------------------
+
+Resolve     // Resolve use load data before view and if changeing data donot use
+--------
+-----------------------------------------------------------------------------------------------------------
+
+pipe  **important
+-----
+
+*Add | pipeype 
+
+
+------------------------------------------------------------------------------------------------------------
+
+create methods two types
+--------------------------
+
+methodname(){
+  return
+}
+
+or
+
+methodname$    -> Instude of add just $ symbol at the end
+
+--------------------------------------------------------------------------------------------------------------
+
+create Servics
+----------------
+
+> ng g s servicename
+
+------------------------------------------------------------------------------------------------------
+
+Crete Environments
+
+> ng g environments
+
+--------------------------------------------------------------------------------------------------------
+
+interface
+----------
+
+export interface Products{     // export interface interfaceName
+    id : number;
+    title: string;
+    description: string;
+    image: string;
+    rating: {rate : number,count:number};
+    price: number
+}
+
+
+===================================================================================================================================================
+
+Angular-Tags
+-------------
+
+<.ng-template><./ng-template> -> Invisible tags  use of Dynamic Output
+
+<.ng-content><./ng-content>  -> Used for getting inside selector contents
+
+EX:
+
+    <.hotel-rooms>
+          <.h1 >Dashborad<./h1>
+    <./hotel-employee>
+
+    <.ng-content select="hotel-employee"><./ng-content>
+
+==============================================================================================================================================
+
+@input()
+--------
+
+*First insert Input in '@angular/core'
+
+*@Input() name : type = assign-value
+
+*Same Name Pass to the tag inside array quote [name]="value"
+
+
+Ex:
+
+get-componet:
+
+  @Input() roomslist : RoomList[] = []  // the same name pass in the tag with [name]
+
+pass-component:
+
+  <.hotel-rooms-list [roomslist]="roomdata"  [title] = "title" ><./hotel-rooms-list>
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+@Output()
+----------
+*First insert Output and EventEmitter  in '@angular/core'
+
+* @Output() name = new EventEmitter<.type>;
+
+*Create Function like <.button class="btn btn-primary" (click)="passdata(room)">Selected<./button>
+
+*Once run function emit value to name like 
+
+EX:
+passdata(x : RoomList){
+
+    this.name.emit(x);
+
+}
+
+ *after Pass data to parrent component same name create function like (name)="newfunction($event)"
+Ex: 
+<.hotel-rooms-list  (bookfun)="gettingdata($event)"><./hotel-rooms-list>
+
+newfunction(x : type){
+
+this.vaule = x;
+
+}
+
+-----------------------------------------------------------------------------------------------------------------
+@ViewChild()  (Its Always works first element)
+------------
+
+*@ViewChild(component, {static: true}) name !: component
+
+*First import Angular/core
+**Add selector in html like Ex: <.hotel-topbar><./hotel-topbar>
+**Its Always work NgOnit or ngAfterViewChecked
+*Its Share all component values and variables
+*{static: true} in that componet NO any Async code othervice remove -: Its Optional
+
+*@ViewChild(component) name !: component :- also work
+
+Ex: 
+
+
+@ViewChild(TopbarComponent,{static: true}) topbar !: TopbarComponent;
+
+ngOnInit(): void {
+  console.log(this.topbar)
+}
+
+(or)
+
+ngAfterViewChecked()
+---------------------
+
+ngAfterViewChecked(): void { 
+    console.log(this.topbar)
+}
+
+------------------------------------------------------------------------------------------------
+
+@ViewChild() to display component
+
+*  <.ng-template #name> <./ng-template>
+*  @ViewChild('name',{read: ViewContainerRef}) var_name !: ViewContainerRef 
+
+*  const componetref = this.var_name.createComponent(component_Name)
+
+** ViewContainerRef is the property  of get component_data
+
+ngAfterViewInit(): void {
+
+  const componetref = this.vrc.createComponent(RoomsComponent)
+
+  * componetref ->  name to access value or update the values from component 
+
+  **createComponent -> is the keyword of create component
+
+  componetref.instance.rooms.avl_rooms =1000;
+
+  **variable_name.instance -> access the component keywords and methods
+
+}
+-----------------------------------------------------------------------------------------------------
+@ViewChild() to display HTML Elements
+
+*  <.h1 class="text-center" #name><./h1>
+*  @ViewChild('name',{static: true}) var_name !: ElementRef 
+
+*  ElementRef is the get the html Elements
+
+ngOnInit(): void {
+ 
+  this.data.nativeElement.innerText = "HTML Elements to View"
+
+** nativeElement ->  To extimate that tag Elements
+
+}
+
+-------------------------------------------------------------------------------------------------------------
+@ViewChildren() (Its Access Multiple  same elements)
+
+@ViewChildren(component_Name) var_name !: QueryList<.HeaderComponent>
+
+* QueryList<.component_name> -> QueryList is the get components as a array to access
+
+EX:
+
+ngAfterViewInit(): void {
+
+  this.var_name.last.title ="Last Title"
+
+  console.log(var_name) Lots of propeties are there
+
+}
+
+-----------------------------------------------------------------------------------------------------------------
+ @ContentChild() -> Its used for directly update child component content value
+
+  @ContentChild(component_Name) Var_name !: component_Name;
+
+  *Import ContentChild in angular/core
+  *Its work only ngAfterContentInit
+
+  Ex: 
+
+  @ContentChild(EmployeeComponent) employee !: EmployeeComponent;
+
+ ngAfterContentInit(): void {
+    this.employee.employename = "hello world"
+  }
+
+
+==========================================================================================================================================
+Life cycle Hooks
+------------------
+
+    ngOnChanges
+    ngOnInit
+    ngDoCheck
+    ngAfterContentInit
+    ngAfterContentChecked
+    ngAfterViewInit
+    ngAfterViewChecked
+    ngOnDestroy
+-------------------------------------------------------------------------------------------------------------------------------
+ngOnInit() :- 
+----------
+*First work after constrater() called 
+*In Class implements OnInit  
+
+EX:
+export class RoomsComponent implements OnInit  {    
+ngOnInit(): void {
+  console.log("NgOnit ")
+}
+
+}
+--------------------------------------------------------------------------------------------------------------------------------
+ngOnChanges()
+-------------
+
+*Its Used for Tract what changes happen and before changes value and current changes value and add function and do events
+
+**Its Usefull for inputs adding events 
+
+
+Ex: 
+export class RoomsListComponent implements OnInit, OnChanges    {
+
+    ngOnChanges(changes: SimpleChanges): void {
+ 
+    console.log(changes) // We get Changes details changes['changes_name']
+
+    if(changes['title']){
+      this.title = changes['title'].currentValue.toUpperCase();
+
+    }
+
+  }
+
+
+}
+
+----------------------------------------------------------------------------------------------------------------------------
+ngDoCheck()
+
+*Implements Docheck,
+*Avoid Docheck and Don't use Onchange and Docheck same Time
+
+Ex:
+ngDoCheck(): void {
+  console.log("do check")
+}
+--------------------------------------------------------------------------------------------------------------------------------
+  ngOnDestroy()   -> Any Element remove in dom then this function will be called
+  -------------
+  
+EX:
+
+    <.div *ngIf="hidden">
+       <.h2Hello World<./h2>
+    <./div>
+
+  ngOnDestroy(): void {
+    console.log("On Destroy Called")
+  } 
+
+=====================================================================================================================================================    
+Dependice Injections(DI)
+------------------------
+* Create Service > ng g s servicename
+* Transfer comon or reusable codes to service and return any method
+*just pass methods inside Constructor()
+*Use Private or Public in the data
+*Its called only Once , If multiple place You can use Then create (Local instance) 
+
+constructor(type var_Name : Service_Name)
+
+Ex: (Its Globel instance)
+
+constructor(private roomdatas : RoomsService){
+  this.roomdata = this.roomdatas.getRooms()  --> method call
+}
+
+Ex: (Local instance)
+
+@Component({
+  selector: 'hotel-employee',
+  templateUrl: './employee.component.html',
+  styleUrls: ['./employee.component.css'],
+  providers: [RoomsService]   --> Declre here
+})
+
+constructor(private roomdatas : RoomsService){
+
+}
+
+------------------------------------------------------------------------------------------------------------------------
+HttpClientModule --> Important (API call) (Its called http method also)
+----------------
+
+*Import HttpClientModule in AppModule
+
+Ex:
+ import {HttpClientModule} from '@angular/common/http' ---> @angular/common/http
+
+     and 
+
+ imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule   ---> add Here
+  ],
+
+  get Api data
+  ------------
+
+  constructor(private http : HttpClient){  --> import HttpClient in @angular/core
+
+  }
+
+///////////////////////////////////////// get()  Method //////////////////////////////////////////////////////////////////////////////////
+
+*****Learn RxJX 
+
+  getdata(){
+    return this.http.get<.Products[]>('https://fakestoreapi.com/products') 
+
+   --->  http > get() > inside get method pass api url
+                               
+
+  }
+
+  * get the export nameof service
+
+  Main step get Data from component.ts
+  --------------------------------------------
+
+ 
+constructor(private allproducts: ProductsbdService){  ---> export service_name
+
+  this.allproducts.getdata().subscribe(product =>{  ---> subscribe method to get data
+
+   this.products = product
+
+  })
+}
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Post() Method \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+*Post method pass to parametter so create function with parametter
+
+  pushdata( data : Products){
+    return this.http.post<.Products[]>('https://fakestoreapi.com/products', data)
+
+* http.post("url", parametter)
+
+  }
+
+
+  
+constructor(private allproducts: ProductsbdService){  /// call that service in constrater
+
+}
+
+
+
+add(){
+
+const product : Products = {                  // this the post data
+  id: 1,
+  title: "test product",
+  description: "lorem ipsum set",
+  image: "https://i.pravatar.cc",
+  rating: { "rate": 4.6, "count": 400 },
+  price: 13.5,
+
+ }
+
+
+ this.allproducts.pushdata(product).subscribe((ppdata) => { // after call that function with subscribe() method
+
+ this.products.push(ppdata)
+
+ }) 
+}
+
+/////////////////////////////////////////////// Update Data put() Method ///////////////////////////////////////////////////////////////////////////
+
+put()
+-----
+
+*Create Function with parameter
+
+*Put(url, pass->parametter) to update data (url inside ad id of product)
+
+Ex:
+  editproduct(product : Products){
+    return this.http.put<.Products[]>('https://fakestoreapi.com/products/'+1,product)
+  }
+
+
+*crate click function
+*Pass call the function ith update data
+
+editProducts(){
+
+  const product : Products = {
+    id: 10,
+    title: "test product",
+    description: "lorem ipsum set",
+    image: "https://i.pravatar.cc",
+    rating: { "rate": 4.6, "count": 400 },
+    price: 15.5,
+  
+   }
+
+   this.allproducts.editproduct(product).subscribe((data)=>{
+
+    this.products = data
+
+    console.log(data)
+   })
+
+
+}
+
+/////////////////////////////////////// Delete - Wants to learn  ////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////  HttpRequest -important   //////////////////////////////////////////////////////////////////////////
+
+
+  getphotos(){      
+        
+      *Create function
+      *Import HttpRequest in angular/core 
+      * new HttpRequest('method', api_url, 
+      {
+        reportProgress: true;
+      }
+      )
+
+      *After return request like this.http.request(varable)
+
+Ex:
+
+    const request = new HttpRequest('GET','https://jsonplaceholder.typicode.com/photos',
+    {
+      reportProgress: true,
+
+    });
+
+    return this.http.request(request)
+  }
+
+
+NgOnit(){
+
+   *Get api details like sent, ResponseHeader, DownloadProgress, Response
+
+   *before get import HttpEventType
+
+
+    this.allproducts.getphotos().subscribe((event) => {
+
+      switch (event.type) {
+        case HttpEventType.Sent: {
+          console.log('Request sent');
+          break;
+        }
+        case HttpEventType.ResponseHeader: {
+          console.log('Request Success');
+          break;
+        }
+        case HttpEventType.DownloadProgress: {
+          this.totalbyte += event.loaded;          // get size of details
+          break;
+        }
+
+        case HttpEventType.Response: {
+          console.log(event.body)
+        }
+
+      }
+    });
+}
+
+////////////////////////////////////////////////////  Send Header Request   ///////////////////////////////////////////////////////////////////
+
+*Create var_Name = new HttpHeaders({name : key, name: key})
+
+  header = new HttpHeaders({tokan: '12234837274682yyy',data: 'dkdkdkd'})
+
+
+  getdata(){
+    return this.http.get<.Products[]>('https://fakestoreapi.com/products',{
+      headers : this.header
+    })
+
+
+    *After any get, post methods pass that value inside obaject {headers : var_Name}
+
+  }
+
+
+////////////////////////////////////////////////// Intercepter  Its use for send header ruquest   /////////////////////////////////////////////////////////////////////////
+
+> ng g interceptor interceptor_name
+
+Afetr register in  AppModule
+
+  providers: [              // add inside providers object type
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: RequestInterceptor,  // interceptor class name
+    multi: true
+  },
+  ]
+
+  *** Usefull for get capture all request
+
+
+ * request.interceptor.ts // intercepter file
+
+
+ intercept(request: HttpRequest<.unknown>, next: HttpHandler): Observable<.HttpEvent<.unknown>> {
+    console.log("First intercepter",request)  // consoling request
+
+    
+    const newRequest = request.clone({                          // request.clone can't add request but make clone from request
+
+      headers: new HttpHeaders({token: '7871751238@goog'})      // pass all request in header
+
+    });
+
+    console.log('second intercepter', newRequest);
+
+             -----------------------------------------------------------------------------------------------------
+            
+            We can Set only header apper post request only
+
+   if(request.method === 'POST'){
+      const newRequest = request.clone({
+        headers: new HttpHeaders({token: '7871751238@goog'})
+      });
+    }
+
+             ---------------------------------------------------------------------------------------------------
+
+    return next.handle(newRequest);
+
+    
+
+  }
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Observable()         -> Observable is api get method return with Observable
+-------------
+
+*Its Push styling works if any data added new then that time its call
+*First import Rxjs
+*Its have next, complete, error methods
+
+Ex: 
+
+streem = new Observable(observer =>{
+  observer.next('user 1')
+  observer.next('user 2')
+  observer.next('user 3')
+  observer.complete()
+
+})
+
+ngOnInit(): void {
+this.streem.subscribe({
+  next: (value) => console.log(value),
+  complete: ()=> console.log('completed'),
+  error: (err)=> console.log(err)
+})
+
+this.streem.subscribe(data => {
+  console.log(data)
+})
+
+*Multiple times we can call
+
+}
+
+===================================================================================================================================
+
+RouterModule  <.navbar>
+----------------------
+
+*When angular install time create RouterModule - yes
+
+app-routing.module.ts --> file for router
+
+const routes: Routes = [
+  {path: 'home', component: HomeComponent},
+  {path: 'about', component: AboutComponent},
+  {path: 'services', component: ServicesComponent},
+  {path: 'blog', component: BlogComponent},
+  {path: 'contact', component: ContactComponent},
+
+  {path: 'home/:id' , component: BookingComponent},    ---> dynamic url
+
+   *Parent componet /:id  (slash / colun : anyname) is the formate of DYNAMIC URL
+
+  {path:'', redirectTo: '/home',pathMatch: 'full' },    --> redirect url
+
+  {path: '**', component: NotfoundComponent}          --> if use "**" its indicate if url not found go this component
+
+
+];
+
+path: is url-slug
+
+component: which componet to display
+
+redirectTo: '/home',pathMatch: 'full'  --> Redirect to url
+
+* RouterModule works only  router-outlet tag inside
+
+<.router-outlet><./router-outlet>
+
+*Its calling like [router-link]=" ' slug '  "  --> ("") inside ('') inside (slug)
+* If use href full page shoude be reload
+
+Ex: 
+ <.li ><.a [routerLink]="'home'">Home<./a><./li>
+
+dynamic url:
+-----------
+
+  <.button class="btn btn-primary" [routerLink]="['/home', Product.id]"> Book&nbsp;Now<./button>
+
+  [routerLink]="['/parent_url',dynamic_value]"
+ 
+   or
+ 
+  routerLink="['/parent_url',dynamic_value]"  ---> inside array first parent with / and comma(,) dynamic value
+
+  -----------------------------------------------------------------------------------------------------------------------
+
+  ActivatedRoute            ---> Url to get data
+  ---------------
+
+    constructor(private route: ActivatedRoute){   // inside constructor add ActivatedRoute (import @angular/ route)
+
+    method 1: subscribe method
+    -------------------------
+
+        route.params.subscribe((data)=>{          // params is parameter of route
+    
+      this.id = data['product_id'];           // that name is dynamic url name  like  {path: 'home/:name' , component: BookingComponent},
+
+       });
+
+     method 2: snapshot
+    ---------------------
+
+      constructor(private route: ActivatedRoute){
+
+  
+        this.id = route.snapshot.params['product_id']   // but this method not update in same view as new value
+
+        }
+
+    method 3: Async propeties
+    --------------------------
+
+
+  constructor(private route: ActivatedRoute){
+
+  }
+
+  id$ = this.route.params.pipe( map(data => data['product_id']) )         // in map import rxjs
+
+
+
+  *in output add this name <.h2>{{id$ | Async }} <./h2>                    // get url data using Async pipe
+ 
+
+
+  }
+
+    Method 4: ParamsMap (best method)
+    -------------------------
+
+      id$ = this.route.paramMap.pipe( map((params) => params.get('product_id')) )
+
+      *Same like Async pipe method but using paramMap because we get (get, has ) functionality in this method
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+navigateByUrl()
+----------------
+
+*If any conditon is true redirect to any other page
+
+  constructor( private route : Router ){     // import Router in angular/router
+   
+  }
+
+  loggin(logindata : NgForm){
+
+   if(logindata.value.name =="admin" && logindata.value.password == 123){
+
+    this.result = "logged in successfully"
+
+    this.route.navigateByUrl('/home/add')   // its method in conditions is true redirect url
+
+                  (or)
+
+    this.route.navigate(['/home','add'])   // same functionality
+
+
+   }
+  }
+
+----------------------------------------------------------------------------------------------------------------------
+
+Nested Route()                                                    // One Router inside open another component
+---------------
+ 
+{
+  path: 'home', component: ProductsComponent,  
+
+  children: [{ path: 'name', component: componentName } , { path: ':product_id', component: BookingComponent }] 
+  
+  // syntax of children route , multiple path can   
+
+  // Note if dynamic route as last paste complsaray
+
+  // path : childurl
+
+},
+
+      <.router-outlet><./router-outlet>                                 // add this from product component html
+
+--------------------------------------------------------------------------------------------------------------------------
+
+LasyLoad()
+-----------
+
+> ng g m booking --route=booking --module=app              // Its automatically create lasy load 
+
+ng g m modulename  --route=slugName  --module= Which module you want
+
+*Its Generate Like this  in Routers
+
+ { path: 'booking', loadChildren: () => import('./booking/booking.module').then(m => m.BookingModule) },
+
+
+=================================================================================================================================
+
+  FORMS MODULE  (Important)
+  --------------
+
+  * import from angular forms in app module
+
+  import {FormsModule} from '@angular/forms'
+
+  *add that module in import
+
+    imports: [
+
+    FormsModule
+ 
+  ],
+
+
+ngModel
+-------
+  *two dimential databinding
+
+   [(ngModel)]="variable"
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+ (ngSubmit)
+ ----------
+
+ *Its like onsubmit 
+
+Ex: 
+  <.form #ngform="ngForm" (ngSubmit)="addproduct()">
+
+---------------------------------------------------------------------------------------------------------------------------
+
+#ngform="ngForm"   ngForm -> contains all conditions and value
+----------------
+
+*create anyname template like #name = "ngForm"
+
+*In that name some values ara there
+
+*contains methods      #name -> name
+--------------------
+name.pristine        -->  Fresh state Initially 'True' Do changes 'False'
+
+name.dirty           -->  onchange working Initially 'False' do  changes 'True'
+
+name.invalid
+
+name.valid
+
+name.value
+
+
+--------------------------------------------------------------------------------------------------------
+
+html 5  Default validation
+---------------------------
+required
+min
+max
+maxlength
+minlength
+pattern
+email
+
+------------------------------------------------------------------------------------------------------------------
+
+#name="ngFModel"   ngModel -> Its access control of inputs
+----------------
+Ex:
+  #producttitle = "ngModel"
+
+ <.div>{{producttitle.errors | json}}<./div>  --> errors finds the erros on input
+
+*get particular error to display
+
+<.div *ngIf="producttitle.errors?.['minlength']">min-lenth 5  <./div>
+
+-----------------------------------------------------------------------------------------------------------------
+
+Rest Form
+----------
+
+  ** #name="ngForm"   --> method pass form data  in parametter
+
+EX:
+
+<.button (click)="restform(ngform)">Reset<./button> // functionname(#name of form name) like #name --> name
+
+method: 1
+---------
+
+  restform(formdata: NgForm){   //functionName(variable: ngForm)  // Always mention 'ngForm' or type of value
+    formdata.reset();   // variablename.reset()  ---> reset funtion
+  }
+
+method: 2
+---------
+
+
+  restform(formdata: any){
+
+    formdata.resetForm({                    // resetForm( Default values ) its usefull of after reset some default value
+      id : 0,
+      title: 'hello',
+      description: '',
+      image: '',
+      rating: {rate : 0 , count: 0},
+      price: 0
+    })
+
+  }
+
+=========================================================================================================================
+
+Install Custom Diractives:
+-------------------------
+step 1: ng g d directiveName   // its similar to component but its don't have template
+
+@Directive({
+  selector: '[hotelHover]'    //diretive just add which tag you want
+})
+
+ex: 
+
+<.input type="email" hotelHover >  // hotelHover is name of the selector
+
+how to select element?
+======================
+
+method: 1
+----------
+
+constructor(private element : ElementRef) { 
+
+}
+
+  ngOnInit(): void {
+
+  this.element.nativeElement.style.background = this.bg;  // nativeElement is target that element
+
+  }
+
+method: 2
+---------
+
+  constructor(private element : ElementRef, private renderer: Renderer2) {   // Renderer2 import
+
+  }
+
+  ngOnInit(): void {
+
+  this.renderer.setStyle(this.element.nativeElement,'background', this.bg);
+
+  setStyle( target_element , 'style', value)
+  
+  }
+
+-------------------------------------------------------------------------------------------------------------
+
+ @HostListener()     ---->  targeted directive to do hover effects from mouse Enter and leave
+ ---------------
+
+  @HostListener('mouseenter') onMouseEnter(){
+    this.element.nativeElement.style.background = 'green';
+  }
+
+  @HostListener('mouseleave') onMouseLeave(){
+    this.element.nativeElement.style.background = 'white';
+  }
+
+*Its also pass @input()
+ 
+================================================================================================================================
+
+Email validator         // Its used for restrict some words come in  input  // custom validator from custom Directive
+----------------
+
+*First create Directive
+
+*add providers like below
+
+*useExisting :  current-directive-name
+
+
+@Directive({
+  selector: '[hotelEmail]',    // hotelEmail is the selector add your input
+  providers: [
+    {
+    provide: NG_VALIDATORS,               
+    useExisting: EmailDirective, 
+    multi: true,
+  }
+  ]
+})
+
+
+  export class EmailDirective implements Validator {     // import Validator in angular/forms
+
+  constructor() {
+
+   }
+
+   validate(control: AbstractControl): ValidationErrors | null {
+
+     const value = control.value as string;         // control.value --->  Input value
+
+     if(value.includes('test')){     // includes (restrict words)
+      return {
+        invalidEmail: true           // If that restrct value come return this error
+      }
+     }
+
+     return null                     // othervice null
+   }
+
+}
+
+
+   <.input type="email" #emailControl = "ngModel" hotelEmail  placeholder="User name" [(ngModel)]="username"> // hotelEmail is the selector name
+           
+   <.div>{{emailControl.errors | json}}<./div> // above create form template return value
+
+
+==========================================================================================================
+
+Pass Tokens:
+============
+
+export interface RouteConfigs{           // interface of service 
+    title : string;
+}
+
+
+    export const routeConfigs = new InjectionToken<.RouteConfigs>('routerconfig');    // interface to > creat > export interfaceToken
+
+
+  providers:[                  // add in module 
+    {
+      provide: routeConfigs,               // add thet export value
+      useValue: {title: 'Room'}            // interface value
+    },
+  ]
+
+    constructor(@Inject(routeConfigs) private configToken: RouteConfigs) {      // inject on oter service run
+    
+    console.log('configServices initialized')
+
+    console.log(configToken)
+  }
+  
+ ====================================================================================================================
+
+ ReactiveFormsModule                //  Typescript form creation
+ --------------------
+
+     ReactiveFormsModule   // Import from angularModule 
+
+
+
+*FormGroup
+*FormControl
+*NestedForm
+*ArrayForm
+*Add control
+*Remove control
+*Binding Control
+
+////////////////////////////////////////////// html ///////////////////////////////////////////////////////////////
+
+<.div class="container">
+    <.p>
+        {{bookingForm.value | json}}
+        {{bookingForm.invalid}}
+
+    <./p>
+    
+    <.hr>
+    <.button class="btn btn-success" (click)="addPassport()">Add Passport<./button>
+
+    <.button class="btn btn-danger" (click)="removePassport()">Remove Passport<./button>
+    <.hr>
+    
+    <.form [formGroup]="bookingForm" class="form-group " (ngSubmit)="addBooking()">
+    
+        <.input class="form-control mb-3 w-50" type="text" formControlName="passport" *ngIf="bookingForm.get('passport')"  name="" id="" placeholder="Passport">
+        <.input class="form-control mb-3 w-50" type="text" formControlName="rooId"  name="" id="" placeholder="room id">
+        <.input class="form-control mb-3 w-50" type="email" formControlName="gusteEmail"  name="" id="" placeholder="Email" required="">
+        <.input class="form-control mb-3 w-50" type="date" formControlName="CheckInDate"  name="" id="" placeholder="Check In">
+        <.input class="form-control mb-3 w-50" type="date" formControlName="CheckOutDate"  name="" id="" placeholder="Check Out">
+        <.input class="form-control mb-3 w-50" type="text" formControlName="bookingstatus"  name="" id="" placeholder="Status">
+        <.input class="form-control mb-3 w-50" type="number" formControlName="amount"  name="" id="" placeholder="amount">
+        <.input class="form-control mb-3 w-50" type="date" formControlName="bookingDate"  name="" id="" placeholder="Booking date">
+        <.input class="form-control mb-3 w-50" type="number" formControlName="mobileNumber"  name="" id="" placeholder="Phone Number">
+        <.input class="form-control mb-3 w-50" type="text" formControlName="guessName"  name="" id="" placeholder="Name">
+
+
+  <.div class="w-100" formGroupName="address">
+    <.h2>nested form<./h2>
+    <.input class="form-control mb-3 w-50" type="text" formControlName="address1"  name="" id="" placeholder="address">
+    <.input class="form-control mb-3 w-50" type="text" formControlName="city"  name="" id="" placeholder="city">
+    <.input class="form-control mb-3 w-50" type="text" formControlName="pincode"  name="" id="" placeholder="pincode">
+  <./div>
+
+  <.div class="w-100" formArrayName="guests" >
+  <.div  *ngFor="let guests of guests.controls; let i=index;">
+
+    <.div  [formGroupName]="i">     <.!-- // array  brocket -->
+        <.h2>Array form {{i+1}}<./h2>
+        <.input class="form-control mb-3 w-50" type="text" formControlName="guestName"  name="" id="" placeholder="Gueste Name">
+        <.input class="form-control mb-3 w-50" type="text" formControlName="age"  name="" id="" placeholder="G-Age">
+        <.button class="btn btn-danger" type="button" (click)="deleteguste(i)">Delete<./button>
+    <./div>
+
+  <./div>
+
+  <./div>
+        
+<.div class="w-100">
+    <.button class="btn btn-success" type="button" (click)="addgust()">Add Gueste <./button>
+<.br>
+    <.button class="btn btn-primary " [disabled]="bookingForm.invalid" type="submit">Book Now<./button>
+
+    <.br>
+
+    <.button class="btn btn-success" type="button" (click)="formreset()">Reset <./button>
+
+
+<./div>
+    
+    <./form>
+<./div>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////// TypeScript //////////////////////////////////////////////////////////
+import { Component, OnInit } from '@angular/core';
+import { ConfigService } from '../services/config.service';
+import { FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'hotel-booking',
+  templateUrl: './booking.component.html',
+  styleUrls: ['./booking.component.css']
+})
+export class BookingComponent implements OnInit {
+
+  bookingForm !: FormGroup;
+
+
+  constructor(private configService: ConfigService, private fb: FormBuilder){
+    
+  }
+
+ngOnInit(): void {
+  this.bookingForm = this.fb.group(
+    {
+      rooId: new FormControl({value:'2', disabled: true},{ validators: [Validators.required]}),
+      gusteEmail: ['',[Validators.required, Validators.email]],
+      CheckInDate: [''],
+      CheckOutDate: [''],
+      bookingstatus: [''],
+      amount: [''],
+      bookingDate: [''],
+      mobileNumber: [''],
+      guessName: [''],
+
+      address: this.fb.group(
+        {
+          address1: [''],
+          city: [''],
+          pincode: ['']
+        }
+      ),
+
+      guests: this.fb.array([
+        this.fb.group({guestName: [''], age: new FormControl('')  }),
+      ]),
+
+    });
+}
+
+addBooking(){
+  console.log(this.bookingForm.value)                // not get diable value
+  console.log(this.bookingForm.getRawValue())       // get disable value also
+
+}
+
+
+// ---------------------------------------------------------------------
+
+get guests(){
+  return this.bookingForm.get('guests') as FormArray;
+}
+
+
+addgust(){
+  this.guests.push(
+    this.fb.group({guestName: [''], age: new FormControl('') })
+  )
+}
+
+// ------------------------------- add control   ------------------------------------------------------
+
+addPassport(){
+this.bookingForm.addControl('passport', new FormControl(''))
+}
+
+
+//------------------------------------ Remove Control -------------------------------------------------
+
+removePassport(){
+  this.bookingForm.removeControl('passport')
+  }
+
+// ------------------------------------------------------------------------------------------------------
+
+deleteguste(i: number){
+  this.guests.removeAt(i);
+}
+
+// ----------------------------------------------------------------------------------------------------------
+
+formreset(){
+  this.bookingForm.reset(                // reset with default values
+    {
+      rooId: '10',
+      gusteEmail: '',
+      CheckInDate: '',
+      CheckOutDate: '',
+      bookingstatus: '',
+      amount: '',
+      bookingDate: '',
+      mobileNumber: '',
+      guessName: '',
+
+      address: 
+        {
+          address1: '',
+          city: '',
+          pincode: ''
+        }
+      ,
+
+      guests: [],
+
+    }
+  );
+
+}
+
+}
+
+
+======================================================================================================================================
+setValue()
+----------
+
+*Pass value inside form 
+*Its pass all input values
+
+EX: Form_varName.setValue({value})
+
+-------------------------------------------------------------------------------------------------------
+
+patchValue()
+----------
+
+*Pass value inside form 
+*No need to pass all input values , you can pass any particular input values
+
+EX: Form_varName.patchValue({value})
+
+-----------------------------------------------------------------------------------------------------------
+
+Onchange Form get data
+--------------------------
+
+ Form_var_name.valueChanges.subscribe((data)=>{
+      console.log(data)
+    })
+
+--------------------------------------------------------------------------------------------------------------
+
+updateOn
+---------
+
+Its useful for call once input change
+
+-------------------------------------------------------------------------------------------------------------
+
+Get Url parameter
+--------------------
+
+constrater(private actrouter: ActivatedRoute){
+
+}
+
+ngOnInit(): void {
+  
+this.actrouter.snapshot.paramMap.get('product_id')
+}
+
+
+===============================================================================================================================
+
+Testing
+--------
+
+> ng test
+
+============================================================================================================================
+</pre>
+
+</body>
+</html>
